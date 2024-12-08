@@ -1,19 +1,32 @@
+import kotlin.math.abs
+
 fun main() {
+    fun parseInput(input: List<String>): Pair<MutableList<Int>, MutableList<Int>> {
+        val left = mutableListOf<Int>()
+        val right = mutableListOf<Int>()
+        for (line in input) {
+            val (l, r) = line.trim().split(Regex("\\s+")).map { it.toInt() }
+            left.add(l)
+            right.add(r)
+        }
+        return Pair(left, right)
+    }
+
     fun part1(input: List<String>): Int {
-        return input.size
+        val (left, right) = parseInput(input)
+        left.sort()
+        right.sort()
+        return left.zip(right).sumOf { (a,b) -> abs(a-b) }
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val (left, right) = parseInput(input)
+
+        return left.sumOf { num ->
+            val frequency = right.count { it == num }
+            num * frequency
+        }
     }
-
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
-
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
     part1(input).println()
